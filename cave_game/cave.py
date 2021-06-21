@@ -20,6 +20,8 @@ def main():
     ship_image = pygame.image.load("ship.png")
     bang_image = pygame.image.load("bang.png")
     holes = []
+    
+    # initial walls have no slope
     for xpos in range(walls):
         holes.append(Rect(xpos * 10, 100, 10, 400))
         
@@ -41,15 +43,20 @@ def main():
             ship_y += velocity
             
             edge = holes[-1].copy()
+            # Rect.move(x, y) => returns a new rect moved by given x, y coordinates
+            # below code moves last rectangle according to current slope
             test = edge.move(0, slope)
             
             if test.top <= 0 or test.bottom >= 600:
                 slope = randint(1, 6) * (-1 if slope > 0 else 1)
+                # Rect.inflate_ip(x, y) => grow or shrink rect in place by given x, y
                 edge.inflate_ip(0, -20)
             
+            # 뒤에 상자 추가 후 제일 앞 상자 삭제.
             edge.move_ip(10, slope)
             holes.append(edge)
             del holes[0]
+            # 앞으로 하나씩 옮김
             holes = [x.move(-10, 0) for x in holes]
 
             if holes[0].top > ship_y or \
@@ -59,18 +66,20 @@ def main():
         
         SURFACE.fill((0, 255, 0))
 
+        # 상자 그리기
         for hole in holes:
             pygame.draw.rect(SURFACE, (0, 0, 0), hole)
-            SURFACE.blit(ship_image, (0, ship_y))
-            score_image = sysfont.render("score is {}".format(score), True, (0, 0, 225))
             
-            SURFACE.blit(score_image, (600, 20))
+        SURFACE.blit(ship_image, (0, ship_y))
+        score_image = sysfont.render("score is {}".format(score), True, (0, 0, 225))
+        
+        SURFACE.blit(score_image, (600, 20))
 
-            if game_over:
-                SURFACE.blit(bang_image, (0, ship_y - 40))
+        if game_over:
+            SURFACE.blit(bang_image, (0, ship_y - 40))
 
-            pygame.display.update()
-            FPSCLOCK.tick(15)
+        pygame.display.update()
+        FPSCLOCK.tick(15)
             
 if __name__ == "__main__":
     main()
