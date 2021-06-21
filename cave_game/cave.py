@@ -58,9 +58,14 @@ def main():
             del holes[0]
             # 앞으로 하나씩 옮김
             holes = [x.move(-10, 0) for x in holes]
-
+            
+            # at top, y = 0 thus, holes[0].top has to be smaller than ship_y for the game to continue.
+            # similarly at bottom, holes[0].bottom has to be bigger than ship_y for the game to continue.
+            # below code can also be expressed from the point of ship_y.
+            # if ship_y < holes[0].top or ship_y > holes[0].bottom
             if holes[0].top > ship_y or \
                 holes[0].bottom < ship_y + 80:
+                    print("holes.top", holes[0].top, "\tholes.bottom", holes[0].bottom, "\tship_y", ship_y)
                     game_over = True
                     
         
