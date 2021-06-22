@@ -38,7 +38,7 @@ def open_tile(field, x_pos, y_pos):
 
     for yoffset in range(-1, 2):
         for xoffset in range(-1, 2):
-            xpos, ypos = (x_pos + xoffset, y_pos, yoffset)
+            xpos, ypos = (x_pos + xoffset, y_pos + yoffset)
             if 0 <= xpos < WIDTH and 0 <= ypos < HEIGHT and \
                field[ypos][xpos] == EMPTY:
                field[ypos][xpos] = OPENED
@@ -55,7 +55,7 @@ def main():
     message_clear = largefont.render("!!CLEARED!!",
                                      True,
                                      (0, 255, 255))
-    message_over = largefont.redner("GAME OVER",
+    message_over = largefont.render("GAME OVER",
                                     True,
                                     (0, 255, 255))
     message_rect = message_clear.get_rect()
@@ -67,7 +67,7 @@ def main():
 
     count = 0
     while count < NUM_OF_BOMBS:
-        xpos, ypos = randint(0, WIDTH - 1), randint(0, HEIGTH - 1)
+        xpos, ypos = randint(0, WIDTH - 1), randint(0, HEIGHT - 1)
 
         if field[ypos][xpos] == EMPTY:
             field[ypos][xpos] = BOMB
