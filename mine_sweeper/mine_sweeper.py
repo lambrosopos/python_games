@@ -19,6 +19,10 @@ SURFACE = pygame.display.set_mode([WIDTH * SIZE, HEIGHT * SIZE])
 FPSCLOCK = pygame.time.Clock()
 
 def num_of_bomb(field, x_pos, y_pos):
+    """
+    특정 칸 주위에 있는 8개의 칸에서 총 몇개의 BOMB 가 있는지
+    확인해주는 함수
+    """
     count = 0
     for yoffset in range(-1, 2):
         for xoffset in range(-1, 2):
@@ -31,9 +35,12 @@ def num_of_bomb(field, x_pos, y_pos):
 
 def open_tile(field, x_pos, y_pos):
     global OPEN_COUNT
+
+    # 확인이 이전에 됐었다면 함수 종료
     if CHECKED[y_pos][x_pos]:
         return
 
+    # 확인을 하게 될 타일을 마킹
     CHECKED[y_pos][x_pos] = True
 
     for yoffset in range(-1, 2):
@@ -44,8 +51,11 @@ def open_tile(field, x_pos, y_pos):
                field[ypos][xpos] = OPENED
                OPEN_COUNT += 1
                count = num_of_bomb(field, xpos, ypos)
+               # count, 즉 주위 폭탄이 없고 확인하는 타일이 
+               # 기존 함수에 넘겨진 타일이 아니라면, 타일 열기
                if count == 0 and \
                   not (xpos == x_pos and ypos == y_pos):
+                   # 재귀로 타일 반복 확인하며 주위에 폭탄이 없는 타일을 열기
                    open_tile(field, xpos, ypos)
 
 
@@ -62,9 +72,11 @@ def main():
     message_rect.center = (WIDTH * SIZE / 2, HEIGHT * SIZE / 2)
     game_over = False
 
+    # 필드를 준비, matrix 로 0 으로 일단 채움 (EMPTY = 0)
     field = [[EMPTY for xpos in range(WIDTH)]
              for ypos in range(HEIGHT)]
 
+    # 폭탄 뿌리기
     count = 0
     while count < NUM_OF_BOMBS:
         xpos, ypos = randint(0, WIDTH - 1), randint(0, HEIGHT - 1)
@@ -78,6 +90,8 @@ def main():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
+            # mouse left click 일 경우 (event.button == 1 은 왼쪽 마우스
+            # 클릭임)
             if event.type == MOUSEBUTTONDOWN and \
                event.button == 1:
                 xpos, ypos = floor(event.pos[0] / SIZE),\
@@ -108,6 +122,7 @@ def main():
                             SURFACE.blit(num_image,
                                          (xpos*SIZE+10, ypos*SIZE+10))
 
+        # 게임 그리기
         for index in range(0, WIDTH*SIZE, SIZE):
             pygame.draw.line(SURFACE, (96, 96, 96),
                              (index, 0), (index, HEIGHT*SIZE))
