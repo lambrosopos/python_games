@@ -103,7 +103,6 @@ def main():
                         open_tile(field, xpos, ypos)
                 elif event.button == 3:
                     field[ypos][xpos]["flag"] = not field[ypos][xpos]["flag"]
-                    print('testing 2')
 
         SURFACE.fill((0, 0, 0))
         for ypos in range(HEIGHT):
