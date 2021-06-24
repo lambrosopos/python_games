@@ -12,6 +12,7 @@ EMPTY = 0
 BOMB = 1
 OPENED = 2
 OPEN_COUNT = 0
+FLAG = 3
 CHECKED = [[0 for _ in range(WIDTH)] for _ in range(HEIGHT)]
 
 pygame.init()
@@ -92,15 +93,17 @@ def main():
                 sys.exit()
             # mouse left click 일 경우 (event.button == 1 은 왼쪽 마우스
             # 클릭임)
-            if event.type == MOUSEBUTTONDOWN and \
-               event.button == 1:
+            if event.type == MOUSEBUTTONDOWN:
                 xpos, ypos = floor(event.pos[0] / SIZE),\
                         floor(event.pos[1] / SIZE)
-
-                if field[ypos][xpos] == BOMB:
-                    game_over = True
-                else:
-                    open_tile(field, xpos, ypos)
+                if event.button == 1:
+                    if field[ypos][xpos] == BOMB:
+                        game_over = True
+                    else:
+                        open_tile(field, xpos, ypos)
+                elif event.button == 3:
+                    field[ypos][xpos] = FLAG
+                    print('testing 2')
 
         SURFACE.fill((0, 0, 0))
         for ypos in range(HEIGHT):
@@ -108,7 +111,7 @@ def main():
                 tile = field[ypos][xpos]
                 rect = (xpos * SIZE, ypos * SIZE, SIZE, SIZE)
 
-                if tile == EMPTY or tile == BOMB:
+                if tile in (EMPTY, BOMB, FLAG):
                     pygame.draw.rect(SURFACE,
                                      (192, 192, 192), rect)
                     if game_over and tile == BOMB:
@@ -121,6 +124,9 @@ def main():
                                 "{}".format(count), True, (255, 255, 0))
                             SURFACE.blit(num_image,
                                          (xpos*SIZE+10, ypos*SIZE+10))
+                    elif tile == FLAG:
+                        pygame.draw.ellipse(SURFACE,
+                                            (225, 0, 225), rect)
 
         # 게임 그리기
         for index in range(0, WIDTH*SIZE, SIZE):
