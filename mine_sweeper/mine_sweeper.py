@@ -29,7 +29,7 @@ def num_of_bomb(field, x_pos, y_pos):
         for xoffset in range(-1, 2):
             xpos, ypos = (x_pos + xoffset, y_pos + yoffset)
             if 0 <= xpos < WIDTH and 0 <= ypos < HEIGHT and \
-               field[ypos][xpos] == BOMB:
+               field[ypos][xpos]["state"] == BOMB:
                 count += 1
 
     return count
@@ -48,8 +48,8 @@ def open_tile(field, x_pos, y_pos):
         for xoffset in range(-1, 2):
             xpos, ypos = (x_pos + xoffset, y_pos + yoffset)
             if 0 <= xpos < WIDTH and 0 <= ypos < HEIGHT and \
-               field[ypos][xpos] == EMPTY:
-               field[ypos][xpos] = OPENED
+               field[ypos][xpos]["state"] == EMPTY:
+               field[ypos][xpos]["state"] = OPENED
                OPEN_COUNT += 1
                count = num_of_bomb(field, xpos, ypos)
                # count, 즉 주위 폭탄이 없고 확인하는 타일이 
@@ -74,7 +74,7 @@ def main():
     game_over = False
 
     # 필드를 준비, matrix 로 0 으로 일단 채움 (EMPTY = 0)
-    field = [[EMPTY for xpos in range(WIDTH)]
+    field = [[{"state":EMPTY, "flag":False} for xpos in range(WIDTH)]
              for ypos in range(HEIGHT)]
 
     # 폭탄 뿌리기
@@ -82,8 +82,8 @@ def main():
     while count < NUM_OF_BOMBS:
         xpos, ypos = randint(0, WIDTH - 1), randint(0, HEIGHT - 1)
 
-        if field[ypos][xpos] == EMPTY:
-            field[ypos][xpos] = BOMB
+        if field[ypos][xpos]["state"] == EMPTY:
+            field[ypos][xpos]["state"] = BOMB
             count += 1
 
     while True:
@@ -97,34 +97,35 @@ def main():
                 xpos, ypos = floor(event.pos[0] / SIZE),\
                         floor(event.pos[1] / SIZE)
                 if event.button == 1:
-                    if field[ypos][xpos] == BOMB:
+                    if field[ypos][xpos]["state"] == BOMB:
                         game_over = True
                     else:
                         open_tile(field, xpos, ypos)
                 elif event.button == 3:
-                    field[ypos][xpos] = FLAG
+                    field[ypos][xpos]["flag"] = not field[ypos][xpos]["flag"]
                     print('testing 2')
 
         SURFACE.fill((0, 0, 0))
         for ypos in range(HEIGHT):
             for xpos in range(WIDTH):
                 tile = field[ypos][xpos]
+                tile_state = tile["state"]
                 rect = (xpos * SIZE, ypos * SIZE, SIZE, SIZE)
 
-                if tile in (EMPTY, BOMB, FLAG):
+                if tile_state in (EMPTY, BOMB):
                     pygame.draw.rect(SURFACE,
                                      (192, 192, 192), rect)
-                    if game_over and tile == BOMB:
+                    if game_over and tile_state == BOMB:
                         pygame.draw.ellipse(SURFACE,
                                             (225, 225, 0), rect)
-                    elif tile == OPENED:
+                    elif tile_state == OPENED:
                         count = num_of_bomb(field, xpos, ypos)
                         if count > 0:
                             num_image = smallfont.render(
                                 "{}".format(count), True, (255, 255, 0))
                             SURFACE.blit(num_image,
                                          (xpos*SIZE+10, ypos*SIZE+10))
-                    elif tile == FLAG:
+                    elif tile["flag"]:
                         pygame.draw.ellipse(SURFACE,
                                             (225, 0, 225), rect)
 
