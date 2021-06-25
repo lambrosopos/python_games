@@ -13,7 +13,10 @@ BOMB = 1
 OPENED = 2
 OPEN_COUNT = 0
 FLAG = 3
-CHECKED = [[0 for _ in range(WIDTH)] for _ in range(HEIGHT)]
+CHECKED = [
+    [0 for _ in range(WIDTH)] 
+    for _ in range(HEIGHT)
+]
 
 pygame.init()
 SURFACE = pygame.display.set_mode([WIDTH * SIZE, HEIGHT * SIZE])
@@ -47,17 +50,15 @@ def open_tile(field, x_pos, y_pos):
     for yoffset in range(-1, 2):
         for xoffset in range(-1, 2):
             xpos, ypos = (x_pos + xoffset, y_pos + yoffset)
-            if 0 <= xpos < WIDTH and 0 <= ypos < HEIGHT and \
-               field[ypos][xpos]["state"] == EMPTY:
-               field[ypos][xpos]["state"] = OPENED
-               OPEN_COUNT += 1
-               count = num_of_bomb(field, xpos, ypos)
-               # count, 즉 주위 폭탄이 없고 확인하는 타일이 
-               # 기존 함수에 넘겨진 타일이 아니라면, 타일 열기
-               if count == 0 and \
-                  not (xpos == x_pos and ypos == y_pos):
-                   # 재귀로 타일 반복 확인하며 주위에 폭탄이 없는 타일을 열기
-                   open_tile(field, xpos, ypos)
+            if 0 <= xpos < WIDTH and 0 <= ypos < HEIGHT and field[ypos][xpos]["state"] == EMPTY: 
+                field[ypos][xpos]["state"] = OPENED
+                OPEN_COUNT += 1
+                count = num_of_bomb(field, xpos, ypos)
+                # count, 즉 주위 폭탄이 없고 확인하는 타일이 
+                # 기존 함수에 넘겨진 타일이 아니라면, 타일 열기
+                if count == 0 and not (xpos == x_pos and ypos == y_pos):
+                    # 재귀로 타일 반복 확인하며 주위에 폭탄이 없는 타일을 열기
+                    open_tile(field, xpos, ypos)
 
 
 def main():
@@ -96,6 +97,7 @@ def main():
             if event.type == MOUSEBUTTONDOWN:
                 xpos, ypos = floor(event.pos[0] / SIZE),\
                         floor(event.pos[1] / SIZE)
+                print(f"{field[ypos][xpos]=}")
                 if event.button == 1:
                     if field[ypos][xpos]["state"] == BOMB:
                         game_over = True
@@ -112,6 +114,7 @@ def main():
                 rect = (xpos * SIZE, ypos * SIZE, SIZE, SIZE)
 
                 if tile_state in (EMPTY, BOMB):
+                    print(f"{tile_state=}")
                     pygame.draw.rect(SURFACE,
                                      (192, 192, 192), rect)
                     if game_over and tile_state == BOMB:
@@ -121,7 +124,8 @@ def main():
                         count = num_of_bomb(field, xpos, ypos)
                         if count > 0:
                             num_image = smallfont.render(
-                                "{}".format(count), True, (255, 255, 0))
+                                "{}".format(count), True, (0, 225, 225))
+                            print(f"{count=}")
                             SURFACE.blit(num_image,
                                          (xpos*SIZE+10, ypos*SIZE+10))
                     elif tile["flag"]:
