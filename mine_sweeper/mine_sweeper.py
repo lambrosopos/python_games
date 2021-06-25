@@ -97,7 +97,6 @@ def main():
             if event.type == MOUSEBUTTONDOWN:
                 xpos, ypos = floor(event.pos[0] / SIZE),\
                         floor(event.pos[1] / SIZE)
-                print(f"{field[ypos][xpos]=}")
                 if event.button == 1:
                     if field[ypos][xpos]["state"] == BOMB:
                         game_over = True
@@ -113,19 +112,21 @@ def main():
                 tile_state = tile["state"]
                 rect = (xpos * SIZE, ypos * SIZE, SIZE, SIZE)
 
-                if tile_state in (EMPTY, BOMB):
-                    print(f"{tile_state=}")
+                if tile_state in (EMPTY, BOMB, OPENED):
+                    # print(f"{tile_state=}")
                     pygame.draw.rect(SURFACE,
                                      (192, 192, 192), rect)
                     if game_over and tile_state == BOMB:
                         pygame.draw.ellipse(SURFACE,
                                             (225, 225, 0), rect)
                     elif tile_state == OPENED:
+                        pygame.draw.rect(SURFACE,
+                                         (0, 0, 0), rect)
                         count = num_of_bomb(field, xpos, ypos)
                         if count > 0:
                             num_image = smallfont.render(
-                                "{}".format(count), True, (0, 225, 225))
-                            print(f"{count=}")
+                                "{}".format(count), True, (225, 225, 0))
+                            # print(f"{count=}")
                             SURFACE.blit(num_image,
                                          (xpos*SIZE+10, ypos*SIZE+10))
                     elif tile["flag"]:
