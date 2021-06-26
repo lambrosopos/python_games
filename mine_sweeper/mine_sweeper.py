@@ -120,9 +120,11 @@ def main():
                         pygame.draw.ellipse(SURFACE,
                                             (225, 225, 0), rect)
                     elif tile_state == OPENED:
+                        # add square if tile has been opened
                         pygame.draw.rect(SURFACE,
                                          (0, 0, 0), rect)
                         count = num_of_bomb(field, xpos, ypos)
+                        # add number to tile if there is a bomb near it
                         if count > 0:
                             num_image = smallfont.render(
                                 "{}".format(count), True, (225, 225, 0))
