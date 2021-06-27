@@ -38,7 +38,7 @@ def tick():
             if event.key == K_LEFT:
                 PADDLE.rect.centerx -= 10
             elif event.key == K_RIGHT:
-                PADDLE.rect.centery += 10
+                PADDLE.rect.centerx += 10
 
     if BALL.rect.centery < 1000:
         BALL.move()
@@ -71,7 +71,7 @@ BALL = Block((242, 242, 0), Rect(300, 400, 20, 20), 10)
 def main():
     myfont = pygame.font.SysFont(None, 80)
     msg_renderer = lambda msg: myfont.render(msg, True, (255, 255, 0))
-    fps = 30
+    fps = 60
     colors = [
         (255, 0, 0),
         (255, 165, 0),
