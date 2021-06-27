@@ -40,6 +40,7 @@ def tick():
             elif event.key == K_RIGHT:
                 PADDLE.rect.centerx += 10
 
+
     if BALL.rect.centery < 1000:
         BALL.move()
 
