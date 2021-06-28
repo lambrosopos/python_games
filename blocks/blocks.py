@@ -68,11 +68,11 @@ FPSCLOCK = pygame.time.Clock()
 BLOCKS = []
 PADDLE = Block((242, 242, 0), Rect(300, 700, 100, 30))
 BALL = Block((242, 242, 0), Rect(300, 400, 20, 20), 10)
+myfont = pygame.font.SysFont(None, 80)
+msg_renderer = lambda msg: myfont.render(msg, True, (255, 255, 0))
+fps = 60
 
-def main():
-    myfont = pygame.font.SysFont(None, 80)
-    msg_renderer = lambda msg: myfont.render(msg, True, (255, 255, 0))
-    fps = 60
+def running():
     colors = [
         (255, 0, 0),
         (255, 165, 0),
@@ -106,6 +106,21 @@ def main():
 
         pygame.display.update()
         FPSCLOCK.tick(fps)
+
+RUNNING = True
+PLAYING = False
+BG_WHITE = (0, 0, 0)
+BG_BLACK = (255, 255, 255)
+def main():
+    while RUNNING:
+        print("In main loop")
+        SURFACE.fill(BG_WHITE)
+        SURFACE.blit(msg_renderer("Menu"), (200, 400))
+
+        pygame.display.update()
+        FPSCLOCK.tick(fps)
+
+
 
 if __name__ == "__main__":
     main()
