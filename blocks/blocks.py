@@ -115,7 +115,7 @@ def main():
     while RUNNING:
         print("In main loop")
         SURFACE.fill(BG_WHITE)
-        SURFACE.blit(msg_renderer("Menu"), (200, 400))
+        # SURFACE.blit(msg_renderer("Menu"), (200, 400))
 
         pygame.display.update()
         FPSCLOCK.tick(fps)
@@ -123,4 +123,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    running()
