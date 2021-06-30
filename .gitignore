@@ -2,3 +2,5 @@ Samples/
 .DS_Store/
 .DS_Store
 .vscode/
+.vim/
+__pycache__/
