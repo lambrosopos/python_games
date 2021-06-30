@@ -1,4 +1,5 @@
 import pygame
+from menu import MainMenu
 
 class Game():
     def __init__(self):
@@ -11,6 +12,7 @@ class Game():
         self.window = pygame.display.set_mode((self.DISPLAY_W, self.DISPLAY_H))
         self.font_name = '8-BIT WONDER.TTF'
         self.BLACK, self.WHITE = ((0, 0, 0), (255, 255, 255))
+        self.curr_menu = MainMenu(self)
 
     def game_loop(self):
         while self.playing:
@@ -31,6 +33,7 @@ class Game():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running, self.playing = False, False
+                self.curr_menu.run_display = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
                     self.START_KEY = True
