@@ -12,7 +12,8 @@ class Game():
         self.window = pygame.display.set_mode((self.DISPLAY_W, self.DISPLAY_H))
         self.font_name = '8-BIT WONDER.TTF'
         self.BLACK, self.WHITE = ((0, 0, 0), (255, 255, 255))
-        self.curr_menu = MainMenu(self)
+        self.main_menu = MainMenu(self)
+        self.curr_menu = self.main_menu
 
     def game_loop(self):
         while self.playing:
