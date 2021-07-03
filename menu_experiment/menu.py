@@ -75,9 +75,9 @@ class MainMenu(Menu):
             if self.state == "Start":
                 self.game.playing = True
             elif self.state == "Options":
-                pass
+                self.game.curr_menu = self.game.options
             elif self.state == "Credits":
-                pass
+                self.game.curr_menu = self.game.credits
 
             self.run_display = False
 
@@ -118,3 +118,23 @@ class OptionsMenu(Menu):
                                            self.voly)
         elif self.game.START_KEY:
             pass
+
+
+class CreditsMenu(Menu):
+    def __init__(self, game):
+        Menu.__init__(self, game)
+
+    def display_menu(self):
+        self.run_display = True
+        while self.run_display:
+            self.game.check_events()
+            if self.game.START_KEY or self.game.BACK_KEY:
+                self.game.curr_menu = self.game.main_menu
+                self.run_display = False
+            self.game.display.fill(self.game.BLACK)
+            self.game.draw_text("Credits", 20, self.game.DISPLAY_W / 2,
+                                self.game.DISPLAY_H / 2 - 20)
+            self.game.draw_text("Made by Christian Duenas", 15, 
+                                self.game.DISPLAY_W / 2,
+                                self.game.DISPLAY_H / 2 + 10)
+            self.blit_screen()
